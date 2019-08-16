@@ -5,6 +5,8 @@
 //  Created by liang on 2019/8/16.
 //  Copyright © 2019 liang. All rights reserved.
 //
+//  https://github.com/music4kid/PMainThreadWatcher
+//  
 
 #import <Foundation/Foundation.h>
 
