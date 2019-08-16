@@ -10,6 +10,15 @@
 #include <signal.h>
 #include <pthread.h>
 
+/*
+    WorkerThread    MainThread
+        |               |
+        | --- ping ---> |
+        |               |
+        | <-- pong ---- |
+        |               |
+ */
+
 #define DUMP_CALLSTACK_SIGNAL SIGUSR1
 static pthread_t tid; // Main thread id.
 
@@ -17,7 +26,6 @@ static void SignalHandler(int signal);
 static void RegisterSignalHandler(void);
 static void SignalDumpCallstack(void);
 
-static NSString *const _PDLagMonitorPingNotification = @"_PDLagMonitorPingNotification";
 static NSString *const _PDLagMonitorPongNotification = @"_PDLagMonitorPongNotification";
 
 @implementation PDLagMonitor {
@@ -43,7 +51,6 @@ static NSString *const _PDLagMonitorPongNotification = @"_PDLagMonitorPongNotifi
     tid = pthread_self();
     RegisterSignalHandler();
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pingFromWorkerThreadNotification:) name:_PDLagMonitorPingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pongFromMainThreadNotification:) name:_PDLagMonitorPongNotification object:nil];
     
     __weak typeof(self) weakSelf = self;
@@ -53,10 +60,6 @@ static NSString *const _PDLagMonitorPongNotification = @"_PDLagMonitorPongNotifi
 }
 
 #pragma mark - Private Methods
-- (void)pingFromWorkerThreadNotification:(NSNotification *)notification {
-    [[NSNotificationCenter defaultCenter] postNotificationName:_PDLagMonitorPongNotification object:nil];
-}
-
 - (void)pongFromMainThreadNotification:(NSNotification *)notification {
     [self cancelPongTimer];
 }
@@ -68,7 +71,7 @@ static NSString *const _PDLagMonitorPongNotification = @"_PDLagMonitorPongNotifi
     }];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:_PDLagMonitorPingNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:_PDLagMonitorPongNotification object:nil];
     });
 }
 
