@@ -7,8 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "PDLagMonitor.h"
 
-@interface ViewController ()
+@interface ViewController () <PDLagMonitorDelegate>
 
 @end
 
@@ -17,7 +18,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    [self commitInit];
+    [self doBusyJob];
 }
 
+- (void)commitInit {
+    [PDLagMonitor globalMonitor].delegate = self;
+    [[PDLagMonitor globalMonitor] startMonitoring];
+}
+
+- (void)doBusyJob {
+    while (YES) {
+        NSLog(@"Do job...");
+    }
+}
+
+#pragma mark - PDLagMonitorDelegate
+- (void)dumpCallstackSymbolsWhenMainThreadLag:(NSArray<NSString *> *)callstackSymbols {
+    NSLog(@"callstackSymbols => %@", callstackSymbols);
+}
 
 @end

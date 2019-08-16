@@ -9,7 +9,6 @@
 #import "PDLagMonitor.h"
 #include <signal.h>
 #include <pthread.h>
-#include <execinfo.h>
 
 #define DUMP_CALLSTACK_SIGNAL SIGUSR1
 static pthread_t tid; // Main thread id.
