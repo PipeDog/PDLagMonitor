@@ -15,6 +15,7 @@
 		DDA8373D2306B81E00DFDD57 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA8373C2306B81E00DFDD57 /* main.m */; };
 		DDA837472306B81E00DFDD57 /* PDLagMonitorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA837462306B81E00DFDD57 /* PDLagMonitorTests.m */; };
 		DDA837522306B81E00DFDD57 /* PDLagMonitorUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA837512306B81E00DFDD57 /* PDLagMonitorUITests.m */; };
+		DDA837622306B86900DFDD57 /* PDLagMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA837612306B86900DFDD57 /* PDLagMonitor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		DDA8374D2306B81E00DFDD57 /* PDLagMonitorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PDLagMonitorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA837512306B81E00DFDD57 /* PDLagMonitorUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PDLagMonitorUITests.m; sourceTree = "<group>"; };
 		DDA837532306B81E00DFDD57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDA837602306B86900DFDD57 /* PDLagMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PDLagMonitor.h; sourceTree = "<group>"; };
+		DDA837612306B86900DFDD57 /* PDLagMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PDLagMonitor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +104,7 @@
 		DDA8372C2306B81C00DFDD57 /* PDLagMonitor */ = {
 			isa = PBXGroup;
 			children = (
+				DDA8375F2306B82700DFDD57 /* Source */,
 				DDA8372D2306B81C00DFDD57 /* AppDelegate.h */,
 				DDA8372E2306B81C00DFDD57 /* AppDelegate.m */,
 				DDA837302306B81C00DFDD57 /* ViewController.h */,
@@ -130,6 +134,15 @@
 				DDA837532306B81E00DFDD57 /* Info.plist */,
 			);
 			path = PDLagMonitorUITests;
+			sourceTree = "<group>";
+		};
+		DDA8375F2306B82700DFDD57 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				DDA837602306B86900DFDD57 /* PDLagMonitor.h */,
+				DDA837612306B86900DFDD57 /* PDLagMonitor.m */,
+			);
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDA837322306B81C00DFDD57 /* ViewController.m in Sources */,
+				DDA837622306B86900DFDD57 /* PDLagMonitor.m in Sources */,
 				DDA8373D2306B81E00DFDD57 /* main.m in Sources */,
 				DDA8372F2306B81C00DFDD57 /* AppDelegate.m in Sources */,
 			);
