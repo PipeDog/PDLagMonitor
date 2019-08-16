@@ -13,9 +13,11 @@
 /*
     WorkerThread    MainThread
         |               |
-        | --- ping ---> |
-        |               |
-        | <-- pong ---- |
+        | --- ping ---> | -----
+        |               |   |
+        |               |   | => Threshold time length is 0.0167s.
+        |               |   |
+        | <-- pong ---- | -----
         |               |
  */
 
