@@ -64,7 +64,7 @@ static NSString *const _PDLagMonitorPongNotification = @"_PDLagMonitorPongNotifi
 - (void)ping {
     __weak typeof(self) weakSelf = self;
     _pongTimer = [self timerWithCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) callback:^{
-        [weakSelf pong];
+        [weakSelf pongWhenTimeout];
     }];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -72,7 +72,7 @@ static NSString *const _PDLagMonitorPongNotification = @"_PDLagMonitorPongNotifi
     });
 }
 
-- (void)pong {
+- (void)pongWhenTimeout {
     [self cancelPongTimer];
     SignalDumpCallstack();
 }
