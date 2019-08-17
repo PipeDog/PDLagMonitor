@@ -35,7 +35,7 @@
 
 #pragma mark - PDLagMonitorDelegate
 - (void)dumpCallstackSymbolsWhenMainThreadLag:(NSArray<NSString *> *)callstackSymbols {
-    NSLog(@"callstackSymbols => %@", callstackSymbols);
+    // Report lag callstack here ...
 }
 
 @end

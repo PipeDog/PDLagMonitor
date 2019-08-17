@@ -28,8 +28,6 @@ static void SignalHandler(int signal);
 static void RegisterSignalHandler(void);
 static void SignalDumpCallstack(void);
 
-static NSString *const _PDLagMonitorPongNotification = @"_PDLagMonitorPongNotification";
-
 @implementation PDLagMonitor {
     dispatch_source_t _pingTimer;
     dispatch_source_t _pongTimer;
@@ -53,40 +51,39 @@ static NSString *const _PDLagMonitorPongNotification = @"_PDLagMonitorPongNotifi
     tid = pthread_self();
     RegisterSignalHandler();
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pongFromMainThreadNotification:) name:_PDLagMonitorPongNotification object:nil];
-    
     __weak typeof(self) weakSelf = self;
-    _pingTimer = [self timerWithCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) callback:^{
+    // 60 times 1s => 0.0167s
+    _pingTimer = [self timerWithTimeInterval:0.0167f queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) callback:^{
         [weakSelf ping];
     }];
 }
 
 #pragma mark - Private Methods
-- (void)pongFromMainThreadNotification:(NSNotification *)notification {
-    [self cancelPongTimer];
-}
-
 - (void)ping {
     __weak typeof(self) weakSelf = self;
-    _pongTimer = [self timerWithCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) callback:^{
-        [weakSelf pongWhenTimeout];
+    // 50 times 1s => 0.0200s
+    _pongTimer = [self timerWithTimeInterval:0.0200f queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) callback:^{
+        [weakSelf pongBeyondThreshold];
     }];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:_PDLagMonitorPongNotification object:nil];
+        [self pong];
     });
 }
 
-- (void)pongWhenTimeout {
+- (void)pong {
+    [self cancelPongTimer];
+}
+
+- (void)pongBeyondThreshold {
     [self cancelPongTimer];
     SignalDumpCallstack();
 }
 
-- (dispatch_source_t)timerWithCallbackQueue:(dispatch_queue_t)queue callback:(dispatch_block_t)callback {
+- (dispatch_source_t)timerWithTimeInterval:(NSTimeInterval)secs queue:(dispatch_queue_t)queue callback:(dispatch_block_t)callback {
     dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
     if (timer) {
-        // 1.f / 60 => 0.0167f
-        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 0.0167f * NSEC_PER_SEC, 0.0167f / 10000 * NSEC_PER_SEC);
+        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, secs * NSEC_PER_SEC, 0.00001f * NSEC_PER_SEC);
         dispatch_source_set_event_handler(timer, callback);
         dispatch_resume(timer);
     }
